@@ -88,14 +88,15 @@ function loadTasks(): Task[] {
   return JSON.parse(taskJSON);
 }
 
-async function getUserInfo() {
+async function getUserInfo(): Promise<User[]> {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
     const users: User[] = await response.json();
     console.log({ users });
-    return { users };
+    return users;
   } catch (error) {
     console.error("Error fetching user data:", error);
+    return [];
   }
 }
 
@@ -156,21 +157,37 @@ const searchInput = document.getElementById(
   "people-search"
 ) as HTMLInputElement | null;
 
-getUserInfo().then((data) => {
-  const users = data?.users || [];
+async function searchResult() {
+  const users = await getUserInfo();
   showUsers(users);
 
   searchInput?.addEventListener("input", (e) => {
     const query = (e.target as HTMLInputElement).value;
     const filteredUsers = searchForAPerson(users, query);
-
     const gallery = document.querySelector(".gallery");
     if (gallery) {
       gallery.innerHTML = "";
       showUsers(filteredUsers);
     }
   });
-});
+}
+
+searchResult();
+
+// Alternative approach with .then():
+// getUserInfo().then((users) => {
+//   // const users = data?.users || [];
+//   showUsers(users);
+//   searchInput?.addEventListener("input", (e) => {
+//     const query = (e.target as HTMLInputElement).value;
+//     const filteredUsers = searchForAPerson(users, query);
+//     const gallery = document.querySelector(".gallery");
+//     if (gallery) {
+//       gallery.innerHTML = "";
+//       showUsers(filteredUsers);
+//     }
+//   });
+// });
 
 //showUsers();
 
