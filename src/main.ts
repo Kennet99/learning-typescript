@@ -88,6 +88,7 @@ function loadTasks(): Task[] {
   return JSON.parse(taskJSON);
 }
 
+//Fetch user data from API
 async function getUserInfo(): Promise<User[]> {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -100,6 +101,7 @@ async function getUserInfo(): Promise<User[]> {
   }
 }
 
+//
 const showUsers = (users: User[]) => {
   users.map((user) => {
     const galleryItem = document.querySelector(".gallery");
@@ -140,22 +142,22 @@ const showUsers = (users: User[]) => {
       usernameElement,
       contactSection,
       companySection,
-      addressSection
+      addressSection,
     );
 
     galleryItem?.append(card, divider);
   });
 };
 
+const searchInput = document.getElementById(
+  "people-search",
+) as HTMLInputElement | null;
+
 const searchForAPerson = (users: User[], query: string) => {
   return users.filter((user) =>
-    user.name.toLowerCase().includes(query.toLowerCase())
+    user.name.toLowerCase().includes(query.toLowerCase()),
   );
 };
-
-const searchInput = document.getElementById(
-  "people-search"
-) as HTMLInputElement | null;
 
 async function searchResult() {
   const users = await getUserInfo();
