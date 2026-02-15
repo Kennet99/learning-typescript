@@ -28,7 +28,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/style.css" />
     <!-- <script src="src/main.ts" type="module"></script> -->
-    <script src="src/index.ts" type="module"></script>
+    <script src="src/index.ts" type="module" defer></script>
     <title>TypeScript Site</title>
   </head>
   <body class="body">
@@ -44,5 +44,9 @@
       <option value="">Choose a product category</option>
     </select>
     <div class="gallery"></div>
+    <div class="paginationWrapper">
+      <button id="previous-button">Previous</button>
+      <button id="next-button">Next</button>
+    </div>
   </body>
 </html>

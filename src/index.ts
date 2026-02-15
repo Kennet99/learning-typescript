@@ -25,6 +25,25 @@ const apiURL = "https://dummyjson.com/products";
 
 // getProductKeys();
 
+// const skipCount = resultsPerPage * (currentPage - 1);
+// fetch('https://dummyjson.com/products?limit=10&skip=10&select=title,price')
+
+const previousButton = document.getElementById(
+  "previous-button",
+) as HTMLButtonElement;
+previousButton.addEventListener("click", () => {
+  console.log("Previous button clicked");
+  currentPage--;
+  fetchProducts();
+});
+
+const nextButton = document.getElementById("next-button") as HTMLButtonElement;
+nextButton.addEventListener("click", () => {
+  console.log("Next button clicked");
+  currentPage++;
+  fetchProducts();
+});
+
 async function fetchProductCategories(): Promise<
   undefined | Record<string, any>[]
 > {
@@ -38,7 +57,7 @@ async function fetchProductCategories(): Promise<
   }
 }
 
-async function fetchProductsByCategory(category: string) {
+async function fetchProductsByCategory(category?: string) {
   try {
     const response = await fetch(`${apiURL}/category/${category}`);
     const products = await response.json();
@@ -63,10 +82,19 @@ async function createCategoryOptions() {
     dropdown.appendChild(option);
   });
 }
+let currentPage = 1;
 
 async function fetchProducts() {
+  const resultsPerPage = 20;
+  const skipCount = (currentPage - 1) * resultsPerPage;
+
+  previousButton.disabled = currentPage === 1;
+  // nextButton.disabled = products.length < resultsPerPage;
+
   try {
-    const response = await fetch(apiURL);
+    const response = await fetch(
+      `${apiURL}?limit=${resultsPerPage}&skip=${skipCount}`,
+    );
     const data = await response.json();
 
     const { products } = data;

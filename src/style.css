@@ -74,6 +74,13 @@ body {
   gap: 0.5em;
 }
 
+.paginationWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  margin-top: 2em;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
