@@ -56,12 +56,26 @@ async function fetchProductCategories(): Promise<
   }
 }
 
-const renderProducts = (products: Record<string, any>[]) => {
+type ProductElements = {
+  brand: string;
+  description: string;
+  price: number;
+  shippingInformation: string;
+  stock: number;
+  thumbnail: string;
+  tags: string[];
+  title: string;
+};
+
+// before specify: const renderProducts = (products: Record<string, any>[]) => {
+const renderProducts = (products: ProductElements[]) => {
   const gallery: HTMLElement | null = document.querySelector(".gallery");
   if (!gallery) return;
   gallery.innerHTML = "";
 
-  products.forEach((product: Record<string, any>) => {
+  // Before: specify: products.forEach((product: Record<string, any>) => {
+  products.forEach((product: ProductElements) => {
+    // Destructure product properties to get only what we need
     const {
       brand,
       description,
@@ -71,7 +85,7 @@ const renderProducts = (products: Record<string, any>[]) => {
       thumbnail,
       tags,
       title,
-    } = product;
+    }: ProductElements = product;
 
     const card = document.createElement("div");
     card.className = "card h-100";
