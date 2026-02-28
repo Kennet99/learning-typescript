@@ -1,3 +1,6 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 const apiURL = "https://dummyjson.com/products";
 
 // Get dynamic product keys and create a Product interface
@@ -30,14 +33,12 @@ const previousButton = document.getElementById(
   "previous-button",
 ) as HTMLButtonElement;
 previousButton.addEventListener("click", () => {
-  console.log("Previous button clicked");
   currentPage--;
   fetchProducts();
 });
 
 const nextButton = document.getElementById("next-button") as HTMLButtonElement;
 nextButton.addEventListener("click", () => {
-  console.log("Next button clicked");
   currentPage++;
   fetchProducts();
 });
@@ -55,30 +56,82 @@ async function fetchProductCategories(): Promise<
   }
 }
 
-async function fetchProductsByCategory(category?: string) {
-  try {
-    const response = await fetch(`${apiURL}/category/${category}`);
-    const products = await response.json();
-    console.log(`Products in category "${category}":`, products);
-    return products.products;
-  } catch (error) {
-    console.error(`Error fetching products for category "${category}":`, error);
-    return [];
-  }
-}
-
-const showProducts = (products: Product[]) => {
-  const gallery = document.querySelector(".gallery");
+const renderProducts = (products: Record<string, any>[]) => {
+  const gallery: HTMLElement | null = document.querySelector(".gallery");
+  if (!gallery) return;
   gallery.innerHTML = "";
-  products.forEach((product) => {
-    const galleryItem = document.createElement("gallery-item");
-    const divider = document.createElement("div");
-    divider.className = "divider";
-    const nameElement = document.createElement("h2");
-    nameElement.className = "name";
-    nameElement.textContent = product.title;
-    galleryItem?.appendChild(nameElement);
-    gallery?.appendChild(galleryItem);
+
+  products.forEach((product: Record<string, any>) => {
+    const {
+      brand,
+      description,
+      price,
+      shippingInformation,
+      stock,
+      thumbnail,
+      tags,
+      title,
+    } = product;
+
+    const card = document.createElement("div");
+    card.className = "card h-100";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    const img = document.createElement("img");
+    img.className = "card-img";
+    img.src = thumbnail;
+    img.alt = title;
+    img.width = 200;
+    img.height = 200;
+
+    const titleElement = document.createElement("h5");
+    titleElement.className = "name";
+    titleElement.textContent = title;
+
+    const priceElement = document.createElement("p");
+    priceElement.className = "card-text";
+    priceElement.textContent = `$${price}`;
+    priceElement.style.fontWeight = "bold";
+
+    const descriptionElement = document.createElement("p");
+    descriptionElement.className = "card-text";
+    descriptionElement.textContent = description;
+    descriptionElement.style.color = "#424242";
+
+    const shippingElement = document.createElement("p");
+    shippingElement.className = "card-text";
+    shippingElement.textContent = `${shippingInformation}`;
+
+    const tagsWrapper = document.createElement("div");
+    tagsWrapper.className = "d-flex gap-1 flex-wrap mb-3";
+    tags?.forEach((tag: string) => {
+      const badge = document.createElement("span");
+      badge.className = "badge bg-secondary";
+      badge.textContent = tag;
+      tagsWrapper.appendChild(badge);
+    });
+
+    cardBody.appendChild(tagsWrapper);
+    cardBody.appendChild(titleElement);
+    cardBody.appendChild(priceElement);
+    cardBody.appendChild(descriptionElement);
+    cardBody.appendChild(shippingElement);
+    card.appendChild(img);
+    card.appendChild(cardBody);
+    gallery.appendChild(card);
+    // gallery?.appendChild(col);
+
+    // Old approach with just labels
+    // const galleryItem = document.createElement("gallery-item");
+    // const divider = document.createElement("div");
+    // divider.className = "divider";
+    // const nameElement = document.createElement("h2");
+    // nameElement.className = "name";
+    // nameElement.textContent = product.title;
+    // galleryItem?.appendChild(nameElement);
+    // gallery?.appendChild(galleryItem);
   });
 };
 
@@ -88,7 +141,14 @@ async function createCategoryOptions() {
   const dropdown = document.getElementById(
     "product-categories",
   ) as HTMLSelectElement;
-  categories.forEach((category: Record<string, string>) => {
+
+  // Need to initialise a default category (all categories) to show all products on initial load
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "All Categories";
+  dropdown.appendChild(defaultOption);
+
+  categories.forEach((category: Record<string, any>) => {
     const option = document.createElement("option");
     option.value = category.slug;
     option.textContent = category.name;
@@ -101,60 +161,32 @@ let currentPage = 1;
 async function fetchProducts() {
   const resultsPerPage = 20;
   const skipCount = (currentPage - 1) * resultsPerPage;
-
   previousButton.disabled = currentPage === 1;
-  // nextButton.disabled = products.length < resultsPerPage;
+
+  const categoryDropdown = document.getElementById(
+    "product-categories",
+  ) as HTMLSelectElement;
+  const selectedCategory = categoryDropdown.value;
+
+  const url = selectedCategory
+    ? `${apiURL}/category/${selectedCategory}?limit=${resultsPerPage}&skip=${skipCount}`
+    : `${apiURL}?limit=${resultsPerPage}&skip=${skipCount}`;
 
   try {
-    const response = await fetch(
-      `${apiURL}?limit=${resultsPerPage}&skip=${skipCount}`,
-    );
+    const response = await fetch(url);
     const data = await response.json();
     const { products } = data;
 
-    const hasResults = data.products && data.products.length > 0;
-    toggleEmptyState(hasResults);
-
+    console.log("Fetched Products Data:", Object.entries(data));
     console.log(data);
 
-    // const allKeys = new Set<string>();
-    // products.forEach((product: any) => {
-    //   Object.keys(product).forEach((key) => allKeys.add(key));
-    // });
-    // dynamicKeys = [...allKeys];
-    // console.log("Dynamic Keys:", dynamicKeys);
+    const hasResults = products && products.length > 0;
+    toggleEmptyState(hasResults);
 
-    const productKeys = Object.keys(data.products[0]);
-    // console.log(productKeys);
-
-    const product = data.products[0];
-    type ProductKeys = keyof typeof product;
-    console.log("Product Keys:", productKeys);
-
-    type Product = {
-      [key in keyof typeof product]: (typeof product)[key];
-    };
-
-    const dropdown = document.getElementById(
-      "product-categories",
-    ) as HTMLSelectElement;
-    const selectedCategory = dropdown.value;
-    console.log("Selected Category:", selectedCategory);
-
-    dropdown.addEventListener("change", async () => {
-      const selectedCategory = dropdown.value;
-      console.log("Selected Category:", selectedCategory);
-      if (selectedCategory) {
-        const categoryProducts = await fetchProductsByCategory(dropdown.value);
-        showProducts(categoryProducts);
-        console.log("Selected category products:", categoryProducts);
-      }
-    });
-
-    showProducts(products);
+    nextButton.disabled = products.length < resultsPerPage;
+    renderProducts(products);
   } catch (error) {
     console.error("Error fetching products:", error);
-    toggleEmptyState(false);
   }
 }
 
@@ -162,13 +194,13 @@ async function searchProducts(query: string) {
   try {
     const response = await fetch(`${apiURL}/search?q=${query}`);
     const data = await response.json();
-    const products = data.products;
+    const { products } = data;
 
     const hasResults = products && products.length > 0;
     toggleEmptyState(hasResults);
 
     if (hasResults) {
-      showProducts(products);
+      renderProducts(products);
     }
   } catch (error) {
     console.error("Error searching for products:", error);
@@ -184,6 +216,14 @@ searchInput.addEventListener("input", () => {
   } else {
     fetchProducts();
   }
+});
+
+const categoryDropdown = document.getElementById(
+  "product-categories",
+) as HTMLSelectElement;
+categoryDropdown.addEventListener("change", () => {
+  currentPage = 1;
+  fetchProducts();
 });
 
 function toggleEmptyState(hasResults: boolean) {

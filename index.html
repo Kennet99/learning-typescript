@@ -27,12 +27,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/style.css" />
+    <!-- Bootstrap CSS via CDN -->
+    <!-- <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    /> -->
+
     <!-- <script src="src/main.ts" type="module"></script> -->
     <script src="src/index.ts" type="module" defer></script>
     <title>TypeScript Site</title>
   </head>
   <body class="body">
-    <h1>Dummy TypeScript Application</h1>
+    <h1>The shop</h1>
+    <!-- Bootstrap JS via CDN -->
+    <!-- <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script> -->
     <!-- <form id="new-task-form">
       <input type="text" id="new-task-title" />
       <button type="submit">Add</button>
@@ -40,19 +54,35 @@
     <!-- <div id="list"></div>
     <div class="divider"></div>
     <input type="text" id="people-search" placeholder="Search people..." /> -->
-    <input
+
+    <!-- <input
       type="text"
       id="search-input"
       placeholder="Search for a product..."
+    /> -->
+
+    <input
+      id="search-input"
+      class="form-control"
+      type="text"
+      placeholder="Search for a product"
     />
-    <select name="categories" id="product-categories">
-      <option value="">Choose a product category</option>
-    </select>
+
+    <!-- <select name="categories" id="product-categories"> -->
+    <!-- <option value="">Choose a product category</option> -->
+    <select id="product-categories" class="form-select"></select>
+    <!-- </select> -->
     <div class="gallery"></div>
     <div class="paginationWrapper">
-      <button id="previous-button">Previous</button>
-      <button id="next-button">Next</button>
+      <button type="button" class="btn btn-secondary" id="previous-button">
+        Previous
+      </button>
+      <button type="button" class="btn btn-primary" id="next-button">
+        Next
+      </button>
     </div>
+
+    <!-- Fluent components -->
     <!-- <fluent-button id="fluent-button">Fluent Button</fluent-button>
     <fluent-button appearance="primary">Learn more</fluent-button>
     <fluent-button tabindex="0">Button</fluent-button> -->
