@@ -1,8 +1,6 @@
-// Dynamically generate the Product interface keys
-let dynamicKeys: string[] = [];
-
 const apiURL = "https://dummyjson.com/products";
 
+// Get dynamic product keys and create a Product interface
 // async function getProductKeys() {
 //   const response = await fetch(apiURL);
 //   const data = await response.json();
@@ -69,8 +67,23 @@ async function fetchProductsByCategory(category?: string) {
   }
 }
 
+const showProducts = (products: Product[]) => {
+  const gallery = document.querySelector(".gallery");
+  gallery.innerHTML = "";
+  products.forEach((product) => {
+    const galleryItem = document.createElement("gallery-item");
+    const divider = document.createElement("div");
+    divider.className = "divider";
+    const nameElement = document.createElement("h2");
+    nameElement.className = "name";
+    nameElement.textContent = product.title;
+    galleryItem?.appendChild(nameElement);
+    gallery?.appendChild(galleryItem);
+  });
+};
+
 async function createCategoryOptions() {
-  const categories = await fetchProductCategories();
+  const categories: Record<string, any>[] = await fetchProductCategories();
   console.log("Categories for Dropdown:", categories);
   const dropdown = document.getElementById(
     "product-categories",
@@ -82,6 +95,7 @@ async function createCategoryOptions() {
     dropdown.appendChild(option);
   });
 }
+
 let currentPage = 1;
 
 async function fetchProducts() {
@@ -96,7 +110,6 @@ async function fetchProducts() {
       `${apiURL}?limit=${resultsPerPage}&skip=${skipCount}`,
     );
     const data = await response.json();
-
     const { products } = data;
 
     const hasResults = data.products && data.products.length > 0;
@@ -138,26 +151,40 @@ async function fetchProducts() {
       }
     });
 
-    const showProducts = (products: Product[]) => {
-      const gallery = document.querySelector(".gallery");
-      gallery.innerHTML = "";
-      products.forEach((product) => {
-        const galleryItem = document.createElement("gallery-item");
-        const divider = document.createElement("div");
-        divider.className = "divider";
-        const nameElement = document.createElement("h2");
-        nameElement.className = "name";
-        nameElement.textContent = product.title;
-        galleryItem?.appendChild(nameElement);
-        gallery?.appendChild(galleryItem);
-      });
-    };
     showProducts(products);
   } catch (error) {
     console.error("Error fetching products:", error);
     toggleEmptyState(false);
   }
 }
+
+async function searchProducts(query: string) {
+  try {
+    const response = await fetch(`${apiURL}/search?q=${query}`);
+    const data = await response.json();
+    const products = data.products;
+
+    const hasResults = products && products.length > 0;
+    toggleEmptyState(hasResults);
+
+    if (hasResults) {
+      showProducts(products);
+    }
+  } catch (error) {
+    console.error("Error searching for products:", error);
+    toggleEmptyState(false);
+  }
+}
+
+const searchInput = document.getElementById("search-input") as HTMLInputElement;
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim();
+  if (query) {
+    searchProducts(query);
+  } else {
+    fetchProducts();
+  }
+});
 
 function toggleEmptyState(hasResults: boolean) {
   const emptyState = document.createElement("p");
