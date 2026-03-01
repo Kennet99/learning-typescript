@@ -172,8 +172,8 @@ async function createCategoryOptions() {
 
   categories.forEach((category: Record<string, any>) => {
     const option = document.createElement("option");
-    option.value = category.slug;
-    option.textContent = category.name;
+    option.value = category.slug; // Slug used for API URL
+    option.textContent = category.name; // Name used for dropdown
     categoryDropdown.appendChild(option);
   });
 }
@@ -186,9 +186,20 @@ async function fetchProducts() {
   const skipCount = (currentPage - 1) * resultsPerPage;
   previousButton.disabled = currentPage === 1;
 
-  const selectedCategory = categoryDropdown.value;
+  const selectedCategory = categoryDropdown.value; // This is the slug
+  const selectedOption =
+    categoryDropdown.options[categoryDropdown.selectedIndex]; // This is the option element, which contains both the slug value and the display text
 
-  // Dynamically construct the API URL based on whether a category is selected or not
+  console.log("Category dropdown options:", categoryDropdown.options);
+  console.log("Selected category option:", selectedOption);
+  console.log("Selected category value:", selectedCategory);
+  console.log("Selected category text:", selectedOption?.text);
+  console.log("Selected category index:", categoryDropdown.selectedIndex);
+
+  // We then get the display name for the selected category to show in the results label
+  const selectedCategoryName = selectedOption?.text || "All Products";
+
+  // Dynamically construct the API URL based on whether a category is selected or not, passing in the slug to the URL
   const url = selectedCategory
     ? `${apiURL}/category/${selectedCategory}?limit=${resultsPerPage}&skip=${skipCount}`
     : `${apiURL}?limit=${resultsPerPage}&skip=${skipCount}`;
@@ -199,14 +210,17 @@ async function fetchProducts() {
     const { products, total } = data;
 
     console.log("Fetched Products Data:", Object.entries(data));
-    console.log(data);
-    console.log(total);
+    console.log("Fetched response array:", data);
+    console.log("Products", products);
+    console.log("Total items:", total);
 
     const hasResults = products && products.length > 0;
     const productCount = total || products.length;
+    // const resultWord = productCount === 1 ? "result" : "results";
+    const resultWord = getResultWord(productCount);
 
-    resultsLabel.className = "text-body mb-3";
-    resultsLabel.innerHTML = `Showing ${productCount} results for <span class="text-body fw-bold">${selectedCategory || "All Products"}</span>`;
+    resultsLabel.className = "text-body mt-2 mb-2";
+    resultsLabel.innerHTML = `Showing ${productCount} ${resultWord} for <span class="text-body fw-bold">${selectedCategoryName || "All Products"}</span>`;
 
     toggleEmptyState(hasResults);
 
@@ -225,11 +239,14 @@ async function searchProducts(query: string) {
 
     console.log("Search Results Data:", Object.keys(data));
     console.log("Products", products);
-    console.log("Total results:", products.length);
+    console.log("Total results:", total);
 
     const hasResults = products && products.length > 0;
     const productCount = total || products.length;
-    resultsLabel.innerHTML = `Showing ${productCount} results for <span class="text-body fw-bold">"${query || "All Products"}"</span>`;
+    // const resultWord = productCount === 1 ? "result" : "results";
+    const resultWord = getResultWord(productCount);
+
+    resultsLabel.innerHTML = `Showing ${productCount} ${resultWord} for <span class="text-body fw-bold">"${query || "All Products"}"</span>`;
     toggleEmptyState(hasResults);
 
     if (hasResults) {
@@ -239,6 +256,11 @@ async function searchProducts(query: string) {
     console.error("Error searching for products:", error);
     toggleEmptyState(false);
   }
+}
+
+// Helper function to choose results word:
+function getResultWord(count: number): string {
+  return count === 1 ? "result" : "results";
 }
 
 // Helper function to toggle empty state message when no products are found
