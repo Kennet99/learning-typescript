@@ -1,3 +1,26 @@
+// Get dynamic product keys and create a Product interface
+// async function getProductKeys() {
+//   const response = await fetch(apiURL);
+//   const data = await response.json();
+
+//   const productKeys = Object.keys(data.products[0]);
+//   console.log(productKeys);
+
+//   const product = data.products[0];
+//   type ProductKeys = keyof typeof product;
+//   console.log("Product Keys as Type:", productKeys);
+
+//   // Define the Product interface dynamically based on the fetched keys
+//   // type Product = {
+//   //   [key in (typeof dynamicKeys)[number]]: any;
+//   // };
+//   type Product = {
+//     [key in keyof typeof product]: (typeof product)[key];
+//   };
+// }
+
+// getProductKeys();
+
 // Old approach to search and filter with separate functions:
 async function searchForProducts(query: string) {
   try {

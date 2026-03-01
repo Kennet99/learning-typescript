@@ -37,10 +37,23 @@
 
     <!-- <script src="src/main.ts" type="module"></script> -->
     <script src="src/index.ts" type="module" defer></script>
-    <title>TypeScript Site</title>
+    <title>The shop</title>
   </head>
   <body class="body">
     <h1>The shop</h1>
+    <h5 class="text-secondary">
+      This is a dummy site to learn TypeScript with mock API & Bootstrap.
+    </h5>
+    <div class="filter-wrapper">
+      <input
+        id="search-input"
+        class="form-control"
+        type="text"
+        placeholder="Search for a product"
+      />
+      <select id="product-categories" class="form-select"></select>
+    </div>
+    <h5 id="results-label" class="results-label"></h5>
     <!-- Bootstrap JS via CDN -->
     <!-- <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -61,19 +74,12 @@
       placeholder="Search for a product..."
     /> -->
 
-    <input
-      id="search-input"
-      class="form-control"
-      type="text"
-      placeholder="Search for a product"
-    />
-
     <!-- <select name="categories" id="product-categories"> -->
     <!-- <option value="">Choose a product category</option> -->
-    <select id="product-categories" class="form-select"></select>
     <!-- </select> -->
     <div class="gallery"></div>
-    <div class="paginationWrapper">
+    <p id="empty-state" style="display: none"></p>
+    <div class="pagination-wrapper">
       <button type="button" class="btn btn-secondary" id="previous-button">
         Previous
       </button>
