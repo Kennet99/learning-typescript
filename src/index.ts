@@ -15,7 +15,6 @@ const categoryDropdown = document.getElementById(
 ) as HTMLSelectElement;
 categoryDropdown.style.minWidth = "300px";
 categoryDropdown.style.maxWidth = "400px";
-// categoryDropdown.className = "w-25";
 
 const previousButton = document.getElementById(
   "previous-button",
@@ -30,6 +29,17 @@ nextButton.addEventListener("click", () => {
   currentPage++;
   fetchProducts();
 });
+
+// const productLink = document.getElementById(
+//   "product-link",
+// ) as HTMLAnchorElement;
+// productLink.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   const productId = productLink.getAttribute("data-product-id");
+//   if (productId) {
+//     window.open(`productId=${productId}`, "_blank");
+//   }
+// });
 
 // Declare event listeners
 // Inline approach for search input event listener
@@ -70,6 +80,7 @@ async function fetchProductCategories(): Promise<
 }
 
 type ProductElements = {
+  id: number;
   brand?: string;
   description: string;
   price: number;
@@ -93,6 +104,7 @@ const renderProducts = (products: ProductElements[]) => {
   products.forEach((product: ProductElements) => {
     // Destructure product properties to get only what we need
     const {
+      id,
       brand,
       description,
       price,
@@ -101,12 +113,11 @@ const renderProducts = (products: ProductElements[]) => {
       thumbnail,
       tags,
       title,
-    }: ProductElements = product;
+    } = product;
 
     const card = document.createElement("div");
     card.className = "row g-0 p-3 border rounded shadow-sm";
     card.style.minWidth = "300px";
-    // card.style.width = "400px";
     card.style.maxWidth = "400px";
     card.style.flex = "0 1 360px";
 
@@ -120,13 +131,42 @@ const renderProducts = (products: ProductElements[]) => {
     img.style.maxWidth = "120px";
     img.style.maxHeight = "120px";
 
-    const titleElement = document.createElement("h5");
-    titleElement.className = "text-primary";
-    titleElement.textContent = title;
-    titleElement.style.fontWeight = "bold";
+    // Label for title - replaced with link
+    // const titleElement = document.createElement("h5");
+    // titleElement.className = "text-primary";
+    // titleElement.textContent = title;
+    // titleElement.style.fontWeight = "bold";
+
+    const productLink: HTMLAnchorElement = document.createElement("a");
+    // productLink.href = `productId=${id}`;
+    // productLink.href = `/product-page/?id=${id}`;
+    // productLink.target = "_blank";
+    productLink.setAttribute("data-product-id", String(product.id));
+    productLink.textContent = title;
+    productLink.className =
+      "link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover fw-bold mb-4";
+
+    // Event listener is not needed - href above will do the work
+    // productLink.addEventListener("click", (e) => {
+    //   e.preventDefault();
+    //   window.open((productLink.href = `/product-page/?id=${id}`), "_blank");
+    //   console.log("Clicked product ID:", id);
+    //   return id;
+    // });
+    productLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      const productId = productLink.getAttribute("data-product-id");
+      console.log("Clicked product ID:", productId);
+      if (productId) {
+        // window.open(`/product-page/?id=${productId}`, "_blank");
+        // window.open(`/product-page?id=${productId}`, "_blank");
+        window.open(`/src/product-page.html?id=${productId}`, "_blank");
+        return id;
+      }
+    });
 
     const priceElement = document.createElement("p");
-    priceElement.className = "card-text mb-2";
+    priceElement.className = "card-text mt-2 mb-2";
     // priceElement.textContent = `$${price} • ${shippingInformation}`;
     priceElement.innerHTML = `<span class="fw-bold">$${price}</span> • <span class="text-body fw-normal">${shippingInformation}</span>`;
     priceElement.style.fontWeight = "bold";
@@ -148,20 +188,21 @@ const renderProducts = (products: ProductElements[]) => {
       tagsWrapper.appendChild(badge);
     });
 
-    textWrapper.appendChild(tagsWrapper);
-    textWrapper.appendChild(titleElement);
-    textWrapper.appendChild(priceElement);
-    textWrapper.appendChild(descriptionElement);
-    // textWrapper.appendChild(shippingElement);
-    card.appendChild(img);
-    card.appendChild(textWrapper);
+    textWrapper.append(
+      tagsWrapper,
+      productLink,
+      priceElement,
+      descriptionElement,
+    );
+    card.append(img, textWrapper);
     gallery.appendChild(card);
     // gallery?.appendChild(col);
   });
 };
 
 async function createCategoryOptions() {
-  const categories: Record<string, any>[] = await fetchProductCategories();
+  const categories: Record<string, any>[] | undefined =
+    await fetchProductCategories();
   console.log("Categories for Dropdown:", categories);
 
   // Need to initialise a default category (all categories) to show all products on initial load
@@ -170,7 +211,7 @@ async function createCategoryOptions() {
   defaultOption.textContent = "All Categories";
   categoryDropdown.appendChild(defaultOption);
 
-  categories.forEach((category: Record<string, any>) => {
+  categories?.forEach((category: Record<string, any>) => {
     const option = document.createElement("option");
     option.value = category.slug; // Slug used for API URL
     option.textContent = category.name; // Name used for dropdown
@@ -237,6 +278,7 @@ async function searchProducts(query: string) {
     const data = await response.json();
     const { products, total } = data;
 
+    console.log("Fetched Products Data:", Object.entries(data));
     console.log("Search Results Data:", Object.keys(data));
     console.log("Products", products);
     console.log("Total results:", total);

@@ -72,3 +72,7 @@ is equivalent to:
 The shorthand order is always: flex: [grow] [shrink] [basis]
 
 // === ===
+
+// Different approaches to the results label with pluralization logic:
+const resultWord = productCount === 1 ? "result" : "results";
+const resultWord = getResultWord(productCount);

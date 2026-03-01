@@ -26,7 +26,7 @@ body {
   /* align-items: center; */
 }
 
-.list {
+/* .list {
   list-style: none;
   padding: 0;
 }
@@ -37,7 +37,7 @@ body {
   background-color: #333;
   border: none;
   margin: 2em 0;
-}
+} */
 
 .gallery {
   display: flex;
@@ -51,22 +51,19 @@ body {
   /* grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); */
 }
 
-.gallery-item {
-  /* background-color: #111; */
+/* .gallery-item {
   border-radius: 12px;
   color: #747bff;
   border-color: #222;
-}
+} */
 
-.description-text {
-  /* color: darkgrey; */
-  /* font-size: 1.2em; */
+/* .description-text {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   -line-clamp: 3;
   overflow: hidden;
-}
+} */
 
 .card-img {
   width: 200px;
@@ -88,6 +85,8 @@ body {
   gap: 1em;
   margin-top: 1.5rem;
   margin-bottom: 2rem;
+  flex: 1 1 auto;
+  align-items: center;
 }
 
 .filter-wrapper {

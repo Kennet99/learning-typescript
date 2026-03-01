@@ -130,6 +130,13 @@ const renderProducts = (products: Record<string, any>[]) => {
     gallery.appendChild(card);
     // gallery?.appendChild(col);
 
+    // textWrapper.appendChild(tagsWrapper);
+    // textWrapper.appendChild(titleElement);
+    // textWrapper.appendChild(priceElement);
+    // textWrapper.appendChild(descriptionElement);
+    // card.appendChild(img);
+    // card.appendChild(textWrapper);
+
     // Old approach with just labels
     // const galleryItem = document.createElement("gallery-item");
     // const divider = document.createElement("div");
