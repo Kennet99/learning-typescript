@@ -143,8 +143,10 @@ const renderProducts = (products: ProductElements[]) => {
     // productLink.target = "_blank";
     productLink.setAttribute("data-product-id", String(product.id));
     productLink.textContent = title;
-    productLink.className =
-      "link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover fw-bold mb-4";
+    productLink.className = "link-primary fw-bold mb-2";
+    productLink.href = "#";
+    // productLink.className =
+    //   "link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover fw-bold mb-4";
 
     // Event listener is not needed - href above will do the work
     // productLink.addEventListener("click", (e) => {
@@ -160,7 +162,7 @@ const renderProducts = (products: ProductElements[]) => {
       if (productId) {
         // window.open(`/product-page/?id=${productId}`, "_blank");
         // window.open(`/product-page?id=${productId}`, "_blank");
-        window.open(`/src/product-page.html?id=${productId}`, "_blank");
+        window.open(`product-page.html?id=${productId}`, "_blank");
         return id;
       }
     });
