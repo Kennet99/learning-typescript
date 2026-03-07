@@ -6,11 +6,12 @@ import { dirname } from "path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  root: resolve(__dirname, "src"),
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
-        product: resolve(__dirname, "product-page.html"),
+        main: resolve(__dirname, "src/index.html"),
+        product: resolve(__dirname, "src/product-page.html"),
       },
     },
   },

@@ -14,9 +14,9 @@ const PORT = 3000;
 //   next();
 // });
 
-app.get("/product-page.html", (_req, res) => {
-  res.redirect("/src/product-page.html");
-});
+// app.get("/product-page.html", (_req, res) => {
+//   res.redirect("/src/product-page.html");
+// });
 
 // app.get("/product-page", (_req, res) => {
 //   res.sendFile(path.resolve(__dirname, "src", "product-page.html"));

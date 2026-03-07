@@ -161,7 +161,6 @@ const renderProducts = (products: ProductElements[]) => {
       console.log("Clicked product ID:", productId);
       if (productId) {
         // window.open(`/product-page/?id=${productId}`, "_blank");
-        // window.open(`/product-page?id=${productId}`, "_blank");
         window.open(`product-page.html?id=${productId}`, "_blank");
         return id;
       }

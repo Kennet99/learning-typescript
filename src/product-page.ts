@@ -2,6 +2,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./style.css";
 
+// Take in the params of the URL from the query string and fetch the product details based on the ID
+const urlParams = new URLSearchParams(window.location.search);
+console.log("URL Parameters:", urlParams.toString());
+console.log("Window location:", window.location.search);
+console.log("Product ID from URL:", urlParams.get("id"));
+const id = urlParams.get("id");
+
+if (id) {
+  fetchProductById(id);
+} else {
+  console.error("No product ID found in URL");
+}
+
 async function fetchProductById(productId: string): Promise<void> {
   try {
     const response = await fetch(`https://dummyjson.com/products/${productId}`);
@@ -73,18 +86,6 @@ async function fetchProductById(productId: string): Promise<void> {
   } catch (error) {
     console.error("Error fetching product details:", error);
   }
-}
-
-// Take in the params of the URL from the query string and fetch the product details based on the ID
-const urlParams = new URLSearchParams(window.location.search);
-console.log("URL Parameters:", urlParams.toString());
-console.log("Window location:", window.location.search);
-const id = urlParams.get("id");
-
-if (id) {
-  fetchProductById(id);
-} else {
-  console.error("No product ID found in URL");
 }
 
 // Single product JSON payload example:
