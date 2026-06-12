@@ -21,6 +21,7 @@ async function fetchProductById(productId: string): Promise<void> {
     const product = await response.json();
     const { reviews } = product;
 
+    console.log("Product data:", product);
     console.log("Title:", product.title);
     console.log("Reviews:", reviews);
 

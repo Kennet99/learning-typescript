@@ -47,7 +47,6 @@ searchInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     const query = searchInput.value.trim();
     query ? searchProducts(query) : fetchProducts();
-    // return query;
   }
 });
 
