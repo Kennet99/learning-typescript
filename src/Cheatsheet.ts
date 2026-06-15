@@ -34,6 +34,27 @@ categoryDropdown.addEventListener("change", () => {
   fetchProducts();
 });
 
+// Button visibility toggle experimentation:
+const toggleButton = document.createElement("fluent-button") as HTMLButtonElement;
+toggleButton.textContent = "Toggle badge";
+app.appendChild(toggleButton);
+
+const badge = document.createElement("fluent-badge") as HTMLDivElement;
+badge.textContent = "Badge";
+badge.style.marginLeft = "10px";
+badge.className = "badgeVisibility";
+app.appendChild(badge);
+
+// OPTION 1: Manipulate the display property directly - doesn't require a CSS class
+toggleButton.addEventListener("click", () => {
+  badge.style.display =
+    badge.style.display === "none" ? "inline-block" : "none";
+});
+
+// OPTION 2: Use a CSS class to toggle visibility - requires a CSS class to work
+toggleButton.addEventListener("click", () => {
+  badge.classList.toggle("badgeVisibility");
+});
 
 // Interpolated string approach with price & shipping info examples:
 
