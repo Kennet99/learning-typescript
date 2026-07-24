@@ -1,3 +1,33 @@
+// Nested ForEach:
+
+const res = await fetch(url);
+const data = await res.json();
+console.log(data); // just look at it. expand it in devtools.
+
+// Example output:
+// data = {
+//   results: [
+//     { id: 1, tags: ["a", "b"] },
+//     { id: 2, tags: ["c"] }
+//   ]
+// }
+
+
+// Nested forEach to iterate over results and their tags
+data.results.forEach((result) => {
+  console.log(`Result ID: ${result.id}`);
+  result.tags.forEach((tag) => {
+    console.log(`Tag: ${tag}`);
+  });
+});
+
+data.results.forEach(item => {
+  item.tags.forEach(tag => {
+    console.log(item.id, tag);
+  });
+});
+
+
 // Declare event listeners
 
 // Event listener for search input - triggers on every input change
