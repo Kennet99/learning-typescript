@@ -43,10 +43,10 @@ nextButton.addEventListener("click", () => {
 
 // Declare event listeners
 // Inline approach for search input event listener
-searchInput.addEventListener("keydown", (e) => {
+searchInput.addEventListener("keydown", async (e) => {
   if (e.key === "Enter") {
     const query = searchInput.value.trim();
-    query ? searchProducts(query) : fetchProducts();
+    query ? await searchProducts(query) : await fetchProducts();
   }
 });
 
