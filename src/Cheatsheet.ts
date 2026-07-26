@@ -1,4 +1,4 @@
-// Nested ForEach:
+// === Nested ForEach ===:
 
 const res = await fetch(url);
 const data = await res.json();
@@ -27,6 +27,41 @@ data.results.forEach(item => {
   });
 });
 
+// === ARRAY DESTRUCTURING WITH ARRAY METHODS ===
+
+const pairs = [[1, 'a'], [2, 'b'], [3, 'c']];
+
+pairs.forEach(([num, letter]) => {
+  console.log(num, letter);
+});
+
+// This is the same as:
+pairs.forEach((pair) => {
+  const num = pair[0];
+  const letter = pair[1];
+  console.log(num, letter);
+});
+
+
+// Returns:
+// 1 'a'
+// 2 'b'
+// 3 'c'
+
+
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+];
+
+const names = users.map(({ name }) => name);
+// ['Alice', 'Bob']
+
+users.forEach(({ id, name }) => {
+  console.log(`${id}: ${name}`);
+});
+
+// === Event Listeners ===
 
 // Declare event listeners
 
