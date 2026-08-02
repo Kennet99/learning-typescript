@@ -289,11 +289,14 @@ async function searchProducts(query: string) {
     const resultWord = getResultWord(productCount);
 
     resultsLabel.innerHTML = `Showing ${productCount} ${resultWord} for <span class="text-body fw-bold">"${query || "All Products"}"</span>`;
-    toggleEmptyState(hasResults);
 
-    if (hasResults) {
-      renderProducts(products);
-    }
+    // if (hasResults) {
+    //   renderProducts(products);
+    // } else {
+    //   toggleEmptyState(hasResults);
+    // }
+
+    hasResults ? renderProducts(products) : toggleEmptyState(false);
   } catch (error) {
     console.error("Error searching for products:", error);
     toggleEmptyState(false);
@@ -309,10 +312,9 @@ function getResultWord(count: number): string {
 function toggleEmptyState(hasResults: boolean) {
   emptyState.id = "empty-state";
   emptyState.textContent = "No products found.";
-  emptyState.style.display = "none";
-  gallery.style.display = hasResults ? "flex" : "none";
   emptyState.style.display = hasResults ? "none" : "block";
-  return hasResults;
+  gallery.style.display = hasResults ? "flex" : "none";
+  // return hasResults;
 }
 
 fetchProducts();
