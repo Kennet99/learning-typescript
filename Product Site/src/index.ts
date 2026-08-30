@@ -45,7 +45,7 @@ nextButton.addEventListener("click", () => {
 // Inline approach for search input event listener
 searchInput.addEventListener("keydown", async (e) => {
   if (e.key === "Enter") {
-    const query = searchInput.value.trim();
+    const query = searchInput.value.trim().toLocaleLowerCase();
     query ? await searchProducts(query) : await fetchProducts();
   }
 });
@@ -140,7 +140,7 @@ const renderProducts = (products: ProductElements[]) => {
     // productLink.href = `productId=${id}`;
     // productLink.href = `/product-page/?id=${id}`;
     // productLink.target = "_blank";
-    productLink.setAttribute("data-product-id", String(product.id));
+    productLink.setAttribute("data-product-id", String(id));
     productLink.textContent = title;
     productLink.className = "link-primary fw-bold mb-2";
     productLink.href = "#";

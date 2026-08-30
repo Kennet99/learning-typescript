@@ -9,11 +9,13 @@ console.log("Window location:", window.location.search);
 console.log("Product ID from URL:", urlParams.get("id"));
 const id = urlParams.get("id");
 
-if (id) {
-  fetchProductById(id);
-} else {
-  console.error("No product ID found in URL");
-}
+// if (id) {
+//   fetchProductById(id);
+// } else {
+//   console.error("No product ID found in URL");
+// }
+
+id ? fetchProductById(id) : console.error("No product ID found in URL");
 
 async function fetchProductById(productId: string): Promise<void> {
   try {
